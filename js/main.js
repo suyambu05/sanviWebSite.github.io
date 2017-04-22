@@ -16,21 +16,50 @@ jQuery(function($) {'use strict',
 		}
 	});
 
+	var max = 150;
+	$('#messageInput').keypress(function(e) {
+        if (e.which < 0x20) {
+            return;     // Do nothing
+        }
+        if (this.value.length == max) {
+            e.preventDefault();
+        } else if (this.value.length > max) {
+            this.value = this.value.substring(0, max);
+        }
+    });
+
+    $('#nameInput').keypress(function(e) {
+       $("#thanksForWishes").text("");
+    });
+
 	$('#submit').click(function (e) {
 
-/*		var config = {
-    	apiKey: "AIzaSyDzmb31vP3z1N0W24Qfh0xN-Eku-bsaH7M",
-    	authDomain: "sanvi-4637b.firebaseapp.com",
-    	databaseURL: "https://sanvi-4637b.firebaseio.com",
-    	projectId: "sanvi-4637b",
-    	storageBucket: "sanvi-4637b.appspot.com",
-    	messagingSenderId: "207055286351"
-  	};
-  	firebase.initializeApp(config);*/
+		$('#nameInput').css("border-width", "");
+			$('#nameInput').css("border-color", "");
+			$('#nameInput').css("border-style","");
+		$('#phoneInput').css("border-width", "");
+			$('#phoneInput').css("border-color", "");
+			$('#phoneInput').css("border-style","");
+		$('#messageInput').css("border-width", "");
+			$('#messageInput').css("border-color", "");
+			$('#messageInput').css("border-style","");
 
 		var name = $('#nameInput').val();
 		var phone = $('#phoneInput').val();
 		var message = $('#messageInput').val();
+		if("" == name) {
+			$('#nameInput').css("border-width", "2px");
+			$('#nameInput').css("border-color", "red");
+			$('#nameInput').css("border-style","solid");
+		} else if ("" == phone) {
+			$('#phoneInput').css("border-width", "2px");
+			$('#phoneInput').css("border-color", "red");
+			$('#phoneInput').css("border-style","solid");
+		} else if ("" == message) {
+			$('#messageInput').css("border-width", "2px");
+			$('#messageInput').css("border-color", "red");
+			$('#messageInput').css("border-style","solid");
+		} else {
 		var n = Date.now();
 		firebase.database().ref('wishes/' +name+n ).set({
 			name:name, 
@@ -39,10 +68,18 @@ jQuery(function($) {'use strict',
 		$('#nameInput').val('');
 		$('#phoneInput').val('');
 		$('#messageInput').val('');
+		var string = 'Thanks!! '+name+' for your Wishes - Sanvika, Check out! Wishes Section.';
+		$("#thanksForWishes").text(string);
+		loadFromFirebase();
+		}
 	});
 
 	$(window).load(function() {
+		loadFromFirebase();
+		
+	});
 
+	function loadFromFirebase() {
 		var wishes = [];
 
 		var query = firebase.database().ref("wishes").orderByKey();
@@ -78,7 +115,7 @@ jQuery(function($) {'use strict',
 
 		$("#birthday-wishes").html(innerHtml);
 		});
-	});
+	}
 
 	//Countdown js
 	 $("#countdown").countdown({
