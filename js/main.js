@@ -215,7 +215,6 @@ jQuery(function($) {'use strict',
 		backgroundColor: '#3e8bff',
 	});
 
-
 	var styles = [ 
 
 	{
